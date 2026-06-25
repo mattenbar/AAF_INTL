@@ -1,10 +1,14 @@
 (function () {
   const contentModelLabels = {
     captioning: "Captioning",
-    google_tagging: "Google Tagging",
     coco: "COCO Object Detection",
+    cld_fashion: "Fashion Detection",
     cld_text: "Text Detection",
+    human_anatomy: "Human Anatomy Detection",
     image_quality: "Image Quality",
+    lvis: "LVIS Object Detection",
+    shop_classifier: "Shop Classifier",
+    unidet: "UniDet Object Detection",
     watermark_detection: "Watermark Detection",
   };
 
@@ -521,14 +525,6 @@
       return caption ? [{ label: "Caption", value: caption }] : [];
     }
 
-    if (endpoint === "google_tagging") {
-      const labels = analysis?.label_annotations?.labels || [];
-      return labels.map((item) => ({
-        label: item.label,
-        value: formatScore(item.score),
-      }));
-    }
-
     if (endpoint === "image_quality") {
       return [
         { label: "Quality", value: analysis.quality },
@@ -543,6 +539,10 @@
         label: item.name,
         value: formatScore(item.confidence),
       }));
+    }
+
+    if (endpoint === "shop_classifier") {
+      return flattenTags(analysis?.tags || analysis?.data || analysis).slice(0, 24);
     }
 
     return flattenTags(analysis?.tags).slice(0, 24);

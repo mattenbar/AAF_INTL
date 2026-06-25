@@ -21,7 +21,6 @@ const analyzeEndpoints = new Set([
   "ai_vision_general",
   "ai_vision_tagging",
   "captioning",
-  "google_tagging",
   "coco",
   "cld_text",
   "image_quality",
@@ -30,7 +29,6 @@ const analyzeEndpoints = new Set([
   "unidet",
   "watermark_detection",
   "shop_classifier",
-  "google_logo_detection",
   "human_anatomy",
 ]);
 

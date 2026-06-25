@@ -24,6 +24,7 @@ Open `http://localhost:5174`.
 - Browser uploads use Cloudinary's Upload Widget with the unsigned preset configured in `server.js` / `.env`.
 - Analyze API calls are proxied through `server.js` so the API secret is not exposed to browser code.
 - Uploaded assets are sent to the Analyze API by delivery URL instead of asset ID to avoid asset-id access restrictions from widget uploads.
+- The AI Content Analysis dropdown lists only the supported Content Analysis models with matching Analyze API endpoints: captioning, COCO, Cloudinary Fashion, Cloudinary Text, Human Anatomy, Image Quality Analysis, LVIS, Shop Classifier, UniDet, and Watermark Detection.
 - Vision AI tags can be filtered with the confidence threshold slider and applied back to the uploaded asset with **Update Image Tags**.
 - AI Vision Prompt Tagging lets you add up to 10 tag names and definitions, analyze the image against those definitions, and apply matched tags back to the asset.
 - Captioning results can be written to Cloudinary contextual metadata keys `caption` and `alt` with **Add Caption + Alt Text**.
