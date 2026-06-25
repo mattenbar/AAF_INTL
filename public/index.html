@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AAF INTL Cloudinary AI Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://upload-widget.cloudinary.com/latest/global/all.js" defer></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">AAF INTL</p>
+          <h1>Cloudinary AI Review</h1>
+        </div>
+        <div class="status-pill" id="serverStatus">Checking server</div>
+      </header>
+
+      <section class="workspace" aria-label="Cloudinary AI analysis demo">
+        <aside class="control-panel">
+          <div class="widget-panel">
+            <span class="widget-panel-title">Cloudinary Upload Widget</span>
+            <span class="widget-panel-meta" id="widgetMeta">Local files, URL, and camera sources</span>
+          </div>
+
+          <button class="primary-button" id="uploadWidgetButton" type="button" disabled>
+            Open Upload Widget
+          </button>
+
+          <div class="analysis-controls">
+            <button class="action-button" id="visionButton" type="button" disabled>
+              Use Cloudinary AI Vision
+            </button>
+
+            <div class="field-group">
+              <label for="contentModel">Content analysis model</label>
+              <select id="contentModel">
+                <option value="captioning">Captioning</option>
+                <option value="google_tagging">Google tagging</option>
+                <option value="coco">Object detection: COCO</option>
+                <option value="cld_text">Text detection</option>
+                <option value="image_quality">Image quality</option>
+                <option value="watermark_detection">Watermark detection</option>
+              </select>
+            </div>
+
+            <button class="action-button" id="contentButton" type="button" disabled>
+              Use AI Content Analysis
+            </button>
+          </div>
+
+          <div class="asset-card" id="assetCard" hidden>
+            <dl>
+              <div>
+                <dt>Public ID</dt>
+                <dd id="assetPublicId"></dd>
+              </div>
+              <div>
+                <dt>Asset ID</dt>
+                <dd id="assetId"></dd>
+              </div>
+              <div>
+                <dt>Dimensions</dt>
+                <dd id="assetDimensions"></dd>
+              </div>
+            </dl>
+          </div>
+        </aside>
+
+        <section class="result-panel">
+          <div class="photo-stage" id="photoStage">
+            <div class="empty-state" id="emptyState">
+              <span class="empty-state-icon" aria-hidden="true"></span>
+              <p>Upload a photo to begin.</p>
+            </div>
+            <img id="previewImage" alt="Selected upload preview" hidden />
+          </div>
+
+          <div class="message" id="message" role="status" aria-live="polite"></div>
+
+          <section class="results-grid" aria-label="Analysis results">
+            <article class="result-card">
+              <div class="result-heading">
+                <h2>Vision AI</h2>
+                <span id="visionState">Idle</span>
+              </div>
+              <div class="result-content" id="visionResult">
+                <p class="muted">Results appear after analysis.</p>
+              </div>
+              <div class="result-actions">
+                <div class="threshold-control">
+                  <label for="tagThreshold">Minimum tag confidence</label>
+                  <div class="range-row">
+                    <input id="tagThreshold" type="range" min="0" max="100" step="5" value="70" />
+                    <output id="tagThresholdValue" for="tagThreshold">70%</output>
+                  </div>
+                </div>
+                <button class="secondary-button" id="updateTagsButton" type="button" disabled>
+                  Update Image Tags
+                </button>
+
+                <div class="prompt-tagging-panel">
+                  <div class="prompt-tagging-heading">
+                    <span>AI Vision Prompt Tagging</span>
+                    <small id="promptTagCount">0 definitions</small>
+                  </div>
+                  <div class="prompt-tagging-fields">
+                    <div class="field-group">
+                      <label for="promptTagName">Tag name</label>
+                      <input id="promptTagName" type="text" placeholder="safety-gear" autocomplete="off" />
+                    </div>
+                    <div class="field-group">
+                      <label for="promptTagDescription">Tag definition</label>
+                      <textarea
+                        id="promptTagDescription"
+                        rows="3"
+                        placeholder="The image shows a person wearing visible safety gear."
+                      ></textarea>
+                    </div>
+                    <button class="secondary-button compact-button" id="addPromptTagButton" type="button">
+                      Add Definition
+                    </button>
+                  </div>
+                  <div class="prompt-tag-list" id="promptTagDefinitions" aria-live="polite"></div>
+                  <button class="secondary-button" id="promptTagButton" type="button" disabled>
+                    Analyze Prompt Tags
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="result-card">
+              <div class="result-heading">
+                <h2>AI Content Analysis</h2>
+                <span id="contentState">Idle</span>
+              </div>
+              <div class="result-content" id="contentResult">
+                <p class="muted">Results appear after analysis.</p>
+              </div>
+              <div class="result-actions">
+                <button class="secondary-button" id="updateCaptionButton" type="button" disabled>
+                  Add Caption + Alt Text
+                </button>
+              </div>
+            </article>
+          </section>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>
