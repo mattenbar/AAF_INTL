@@ -1,6 +1,6 @@
 # AAF INTL Cloudinary AI Demo
 
-Demo web app for uploading an image to Cloudinary cloud `doxfstysv` with the Cloudinary Upload Widget, then running:
+Demo web app for uploading an image to your Cloudinary cloud with the Cloudinary Upload Widget, then running:
 
 - Cloudinary AI Vision General analysis
 - Cloudinary AI Vision Prompt Tagging
@@ -9,7 +9,7 @@ Demo web app for uploading an image to Cloudinary cloud `doxfstysv` with the Clo
 ## Setup
 
 1. Copy `.env.example` to `.env`.
-2. Add your Cloudinary API key and API secret to `.env`.
+2. Add your Cloudinary cloud name, API key, and API secret to `.env`.
 3. Keep `CLOUDINARY_UPLOAD_PRESET=unsigned_upload_preset`, or change it if your Cloudinary preset name changes.
 4. Start the app:
 

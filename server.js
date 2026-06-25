@@ -10,7 +10,7 @@ const envPath = path.join(__dirname, ".env");
 
 loadDotEnv(envPath);
 
-const cloudName = process.env.CLOUDINARY_CLOUD_NAME || "doxfstysv";
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME || "";
 const apiKey = process.env.CLOUDINARY_API_KEY || "";
 const apiSecret = process.env.CLOUDINARY_API_SECRET || "";
 const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET || "unsigned_upload_preset";
@@ -50,6 +50,7 @@ const server = createServer(async (req, res) => {
       return sendJson(res, 200, {
         cloudName,
         uploadPreset,
+        hasCloudName: Boolean(cloudName),
         hasUploadPreset: Boolean(uploadPreset),
         hasAnalyzeCredentials: Boolean(apiKey && apiSecret),
       });
@@ -93,6 +94,13 @@ async function handleAnalyze(req, res, endpoint) {
     return sendJson(res, 404, { error: `Unsupported analysis endpoint: ${endpoint}` });
   }
 
+  if (!cloudName) {
+    return sendJson(res, 503, {
+      error: "Missing Cloudinary cloud name on the server.",
+      detail: "Add CLOUDINARY_CLOUD_NAME to AAF_INTL/.env.",
+    });
+  }
+
   if (!apiKey || !apiSecret) {
     return sendJson(res, 503, {
       error: "Missing Cloudinary API credentials on the server.",
@@ -124,6 +132,13 @@ async function handleAnalyze(req, res, endpoint) {
 }
 
 async function handleTaskStatus(res, taskId) {
+  if (!cloudName) {
+    return sendJson(res, 503, {
+      error: "Missing Cloudinary cloud name on the server.",
+      detail: "Add CLOUDINARY_CLOUD_NAME to AAF_INTL/.env.",
+    });
+  }
+
   if (!apiKey || !apiSecret) {
     return sendJson(res, 503, {
       error: "Missing Cloudinary API credentials on the server.",
@@ -139,6 +154,13 @@ async function handleTaskStatus(res, taskId) {
 }
 
 async function handleUpdateTags(req, res) {
+  if (!cloudName) {
+    return sendJson(res, 503, {
+      error: "Missing Cloudinary cloud name on the server.",
+      detail: "Add CLOUDINARY_CLOUD_NAME to AAF_INTL/.env.",
+    });
+  }
+
   if (!apiKey || !apiSecret) {
     return sendJson(res, 503, {
       error: "Missing Cloudinary API credentials on the server.",
@@ -165,6 +187,13 @@ async function handleUpdateTags(req, res) {
 }
 
 async function handleUpdateContext(req, res) {
+  if (!cloudName) {
+    return sendJson(res, 503, {
+      error: "Missing Cloudinary cloud name on the server.",
+      detail: "Add CLOUDINARY_CLOUD_NAME to AAF_INTL/.env.",
+    });
+  }
+
   if (!apiKey || !apiSecret) {
     return sendJson(res, 503, {
       error: "Missing Cloudinary API credentials on the server.",

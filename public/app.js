@@ -1,5 +1,4 @@
 (function () {
-  const defaultCloudName = "doxfstysv";
   const contentModelLabels = {
     captioning: "Captioning",
     google_tagging: "Google Tagging",
@@ -10,7 +9,8 @@
   };
 
   const state = {
-    cloudName: defaultCloudName,
+    cloudName: "",
+    hasCloudName: false,
     hasAnalyzeCredentials: false,
     uploadPreset: "",
     uploadResult: null,
@@ -84,16 +84,13 @@
   async function loadServerConfig() {
     try {
       const config = await fetchJson("/api/config");
-      state.cloudName = config.cloudName || defaultCloudName;
+      state.cloudName = config.cloudName || "";
+      state.hasCloudName = Boolean(config.hasCloudName && state.cloudName);
       state.hasAnalyzeCredentials = Boolean(config.hasAnalyzeCredentials);
       state.uploadPreset = config.uploadPreset || "";
-      elements.serverStatus.textContent = state.hasAnalyzeCredentials
-        ? `Cloud ${state.cloudName} connected`
-        : `Cloud ${state.cloudName}: add API credentials`;
-      elements.serverStatus.classList.toggle("is-warning", !state.hasAnalyzeCredentials);
-      elements.widgetMeta.textContent = state.uploadPreset
-        ? "Local files, URL, and camera sources"
-        : "Add CLOUDINARY_UPLOAD_PRESET to .env";
+      elements.serverStatus.textContent = getServerStatusText();
+      elements.serverStatus.classList.toggle("is-warning", !state.hasCloudName || !state.hasAnalyzeCredentials);
+      elements.widgetMeta.textContent = getWidgetMetaText();
     } catch (error) {
       elements.serverStatus.textContent = "Server unavailable";
       elements.serverStatus.classList.add("is-warning");
@@ -102,6 +99,11 @@
   }
 
   function openUploadWidget() {
+    if (!state.hasCloudName) {
+      showMessage("Add CLOUDINARY_CLOUD_NAME to AAF_INTL/.env and restart the server.", "error");
+      return;
+    }
+
     if (!state.uploadPreset) {
       showMessage("Add CLOUDINARY_UPLOAD_PRESET to AAF_INTL/.env and restart the server.", "error");
       return;
@@ -826,13 +828,37 @@
   function updateControls() {
     const hasUpload = Boolean(state.uploadResult);
 
-    elements.uploadWidgetButton.disabled = !state.uploadPreset;
+    elements.uploadWidgetButton.disabled = !state.hasCloudName || !state.uploadPreset;
     elements.visionButton.disabled = !hasUpload;
     elements.contentButton.disabled = !hasUpload;
     elements.promptTagButton.disabled = !hasUpload || !state.promptTagDefinitions.length;
     elements.updateTagsButton.disabled = !hasUpload || !state.visionTags.length;
     elements.updateCaptionButton.disabled = !hasUpload || !state.contentCaption;
     elements.tagThreshold.disabled = !hasUpload;
+  }
+
+  function getServerStatusText() {
+    if (!state.hasCloudName) {
+      return "Add CLOUDINARY_CLOUD_NAME";
+    }
+
+    if (!state.hasAnalyzeCredentials) {
+      return `Cloud ${state.cloudName}: add API credentials`;
+    }
+
+    return `Cloud ${state.cloudName} connected`;
+  }
+
+  function getWidgetMetaText() {
+    if (!state.hasCloudName) {
+      return "Add CLOUDINARY_CLOUD_NAME to .env";
+    }
+
+    if (!state.uploadPreset) {
+      return "Add CLOUDINARY_UPLOAD_PRESET to .env";
+    }
+
+    return "Local files, URL, and camera sources";
   }
 
   function setBusy(button, isBusy, label) {
