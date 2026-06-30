@@ -10,8 +10,16 @@ Demo web app for uploading an image to your Cloudinary cloud with the Cloudinary
 
 1. Copy `.env.example` to `.env`.
 2. Add your Cloudinary cloud name, API key, and API secret to `.env`.
-3. Keep `CLOUDINARY_UPLOAD_PRESET=unsigned_upload_preset`, or change it if your Cloudinary preset name changes.
-4. Start the app:
+3. Keep `CLOUDINARY_UPLOAD_PRESET=unsigned_upload_preset`, or change it if you want to use a different preset name.
+4. Run the first-time setup to create the unsigned upload preset that the Upload Widget uses:
+
+```bash
+npm run setup
+```
+
+This checks Cloudinary for `CLOUDINARY_UPLOAD_PRESET`. If it does not exist, the script creates an unsigned preset using the folder in `CLOUDINARY_UPLOAD_FOLDER` and disables caller-supplied public IDs.
+
+5. Start the app:
 
 ```bash
 npm start
@@ -21,6 +29,7 @@ Open `http://localhost:5174`.
 
 ## Notes
 
+- The setup script uses Cloudinary's Admin API upload preset endpoints to check and create the unsigned preset.
 - Browser uploads use Cloudinary's Upload Widget with the unsigned preset configured in `server.js` / `.env`.
 - Analyze API calls are proxied through `server.js` so the API secret is not exposed to browser code.
 - Uploaded assets are sent to the Analyze API by delivery URL instead of asset ID to avoid asset-id access restrictions from widget uploads.
